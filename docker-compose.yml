@@ -1,6 +1,6 @@
 version: '3'
 web:
   app:
-    image: almogchn/project_extension3:${IMAGE_TAG}
+    image: almogchn/project_extension3:43
     ports:
     - "5000:5000"
