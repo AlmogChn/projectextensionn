@@ -1,49 +1,55 @@
-from pymysql import OperationalError
-from selenium import webdriver
-from selenium.common import NoSuchElementException
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-import requests
-import db_connector
-import sys
+import pymysql
+
+db = pymysql.connect(host='remotemysql.com', port=3306, user='AEfWGNA9zC', password='g0PRYTjC6R', db='AEfWGNA9zC')
+cur = db.cursor()
+db.autocommit(True)
 
 
-db_user = sys.argv[1]
-db_password = sys.argv[2]
+class Msql:                 # this class is for "users" table
+    def __init__(self, user_id=[], user_name=[], table=[]):
+        self.user_id = user_id
+        self.user_name = user_name
+        self.table = table
 
-try:
-    res = requests.post('http://127.0.0.1:5000/users/1421', json={"user_name": 'fds'})
-    print(res.json())
+    def insert_into(self):
+        return \
+            cur.execute(
+                f"insert into AEfWGNA9zC.{self.table} (user_id, user_name, creation_date) VALUES ('{self.user_id}', '{self.user_name}', sysdate() )")
 
-    res = requests.get('http://127.0.0.1:5000/users/1421', json={"user_name": 'sdf'})
-    print(res.json(), 'status code:', res.status_code)
-    res_dict = dict(res.json())
-    user_name1 = (res_dict['user_name'])
+    # This function was written to insert a new row into the table
 
-    user_name2 = db_connector.Msql(table='users', user_id=1421)  # Please make sure you enter the new user_id in the test
-    if db_connector.Msql.select_name(user_name2) == user_name1:
-        print('Ok - Match username(db-backend)')
-    else:
-        print('Error - Username does not match(db-backend)')
+    def select_name(self):
+        cur.execute(f"select * from AEfWGNA9zC.{self.table} where user_id ='{self.user_id}'")
+        row = cur.fetchone()
+        return row[1]
 
-    driver = webdriver.Chrome(executable_path="C:\\Users\אלמוג\\Downloads\\chromedriver_win32\\ChromeDriver.exe")
-    driver.implicitly_wait(5)
-    driver.get('http:///127.0.0.1:5001/users/1421') # Please make sure you enter the new user_id in the test
-    try:
-        user_name = driver.find_element(By.ID, value='user')
-        print(f'the user name on this id : {user_name.text}')
-    except NoSuchElementException:
-        no_user = driver.find_element(By.ID, value='error')
-        print(no_user.text)
+    # This function was written to select one row for table
 
-    if db_connector.Msql.select_name(user_name2) == str(user_name.text):
-        print('Ok - Match username(db-fronted)')
-    else:
-        print('Error - Username does not match(db-fronted)')
+    def select_all(self):
+        cur.execute(f"select * from AEfWGNA9zC.{self.table}")
+        return cur.fetchall()
 
-    driver.quit()
-except ValueError or BaseException or OperationalError as error :
-    print({'test failed': error})
+    # This function was written to select all rows in a table
 
+    def del_from_id(self):
+        return \
+            cur.execute(f"delete from AEfWGNA9zC.{self.table} where user_id = {self.user_id}")
 
+    # This function was written to delete row by id
 
+    def update_name_from_id(self):
+        return \
+            cur.execute(
+                f"update AEfWGNA9zC.{self.table} set user_name = '{self.user_name}', creation_date= sysdate() where user_id = {self.user_id}")
+
+    # This function was written to update name in a row
+
+    def check_id(self):
+        cur.execute(f"select * from AEfWGNA9zC.{self.table}")
+        rows = cur.fetchall()
+        check_id = int(self.user_id)
+        for row in rows:
+            if row[0] == int(check_id):
+                return True
+
+    # This function was written to check if there is already such a user id that exists in the table
