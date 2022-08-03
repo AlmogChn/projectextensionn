@@ -61,14 +61,9 @@ pipeline{
         }  
     }   
     post {
-        failure {
-            mail to: 'almogchn100@gmail.com',
-                 subject: "Failed Pipeline: ${currentBuild.fullDisplayName}",
-                 body: "Something is wrong"
-            }
-        }
         always {
             sh "docker rmi $registry:$BUILD_NUMBER"
         }
-     }
+    }
+    
 }
