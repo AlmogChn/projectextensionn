@@ -59,6 +59,21 @@ pipeline{
                 sh "echo IMAGE_TAG=${BUILD_NUMBER} > .env"
             }
         }  
+        stage ('docker compose'){
+            steps{
+                sh 'docker-compose up -d'
+            }
+        }
+       stage ('docker backend testing'){
+            steps{
+                 sh 'python docker_backend_testing.py'
+            }
+        }
+       stage('clean environment again'){
+            steps{
+                 sh 'python clean_environment.py'
+            }
+        }      
     }   
     post {
         always {
