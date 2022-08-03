@@ -4,52 +4,33 @@ pipeline{
         buildDiscarder(logRotator(numToKeepStr: '20', daysToKeepStr: '5'))
     }
     environment {
-        CREDS = credentials('project0') /* ..please add to your jenkins new credentials = username: AEfWGNA9zC + password: g0PRYTjC6R, id: project0  .. */
+        registry = "almogchn/project_extension3"
+        registryCredential = 'docker_hub'
+        dockerImage = ''
     }
     stages{
-        stage('checkout') {
+        stage('Cloning Git') {
             steps {
                 script { 
                     properties([pipelineTriggers([pollSCM('30 * * * *')])])
                 }
-                git 'https://github.com/AlmogChn/project_second_part.git'
+                git branch: 'main', url: 'https://github.com/AlmogChn/projectextension.git'
             }
         }
         stage('run backend server') {
             steps{
                 script{
-                    sh ' nohup python rest_app.py $CREDS_USR $CREDS_PSW &'
-                }
-            }
-        }
-        stage('run fronted server') {
-            steps {
-                script {
-                    sh ' nohup python web_app.py $CREDS_USR $CREDS_PSW &'
+                    sh ' nohup python rest_app.py &'
                 }
             }
         }
         stage('backend testing') {
             steps {
                 script {
-                    sh 'python backend_testing.py $CREDS_USR $CREDS_PSW'
+                    sh 'python backend_testing.py'
                 }
             }
         }
-        stage('frontend testing'){
-            steps{
-                script {
-                    sh 'python frontend_testing.py $CREDS_USR $CREDS_PSW'
-                }
-            }
-        }
-        stage('combined testing') {
-            steps {
-                script {
-                    sh 'python combined_testing.py $CREDS_USR $CREDS_PSW'
-                }
-            }
-        }    
         stage('clean environment') {
             steps {
                 script {
@@ -57,6 +38,27 @@ pipeline{
                 }
             }
         }
+        stage ('build image'){
+            steps {
+                script {
+                    dockerImage = docker.build registry + ":$BUILD_NUMBER"
+                }
+            }
+        }
+        stage('push image') {
+            steps {
+                script {
+                    docker.withRegistry('', registryCredential) {
+                        dockerImage.push()
+                    }
+                }
+            }
+        }
+         stage('set version') {
+            steps {
+                sh "echo IMAGE_TAG=${BUILD_NUMBER} > .env"
+            }
+        }  
     }    
     post {
     failure {
