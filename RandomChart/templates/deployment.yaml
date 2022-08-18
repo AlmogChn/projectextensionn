@@ -1,7 +1,7 @@
-apiVersion: apps/v1
+apiVersion: apps/v3
 kind: Deployment
 metadata:
-  name: hello-python3
+  name: anotherproject
 spec:
   selector:
     matchLabels:
@@ -10,10 +10,10 @@ spec:
   template:
     metadata:
       labels:
-        app: hello-python3
+        app: anotherproject
     spec:
       containers:
-      - name: hello-python3
+      - name: anotherproject
         image: {{ .Values.image.repository }}
         imagePullPolicy: Always
         ports:
