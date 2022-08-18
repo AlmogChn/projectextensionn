@@ -13,7 +13,7 @@ spec:
         app: anotherproject
     spec:
       containers:
-      - name: anotherproject
+      - name: {{ .Values.image.name }}
         image: {{ .Values.image.repository }}
         imagePullPolicy: Always
         ports:
