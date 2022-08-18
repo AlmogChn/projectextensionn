@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  repository: almogchn/project_extension3:${IMAGE_TAG}
+  repository: almogchn/project_extension3:40
   pullPolicy: Always
   tag: ""
   
