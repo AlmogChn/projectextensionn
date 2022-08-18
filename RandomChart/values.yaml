@@ -1,7 +1,7 @@
-replicaCount: 3
+replicaCount: 1
 
 image:
-  repository: dgotlieb/pyrandom:1.0
+  repository: almogchn/project_extension3:${IMAGE_TAG}
   pullPolicy: Always
   tag: ""
   
