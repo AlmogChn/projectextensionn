@@ -1,6 +1,6 @@
-apiVersion: v3
+apiVersion: v2
 appVersion: 1.16.0
-description: A Helm chart for Kubernetes
-name: project
+description: Helm part project
+name: almog
 type: application
 version: 0.1.0
