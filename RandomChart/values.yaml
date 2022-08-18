@@ -4,6 +4,7 @@ image:
   repository: almogchn/project_extension3:<Version>
   pullPolicy: Always
   tag: ""
+  name: almog
   
 service:
     type: LoadBalancer
