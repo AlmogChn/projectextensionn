@@ -76,7 +76,7 @@ pipeline{
         }
        stage('Deploy HELM chart'){
             steps{
-                 sh 'helm install project RandomChart --set image.version=almogchn/almogchn/project_extension3:$${BUILD_NUMBER}
+                 sh 'helm install project RandomChart --set image.version=almogchn/almogchn/project_extension3:${BUILD_NUMBER}
 '
             }
         }        
