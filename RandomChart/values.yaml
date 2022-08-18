@@ -1,7 +1,7 @@
 replicaCount: 5
 
 image:
-  repository: almogchn/project_extension3:10
+  repository: almogchn/project_extension3:${BUILD_NUMBER}
   pullPolicy: Always
   tag: ""
   name: almog
