@@ -14,7 +14,7 @@ pipeline{
                 script { 
                     properties([pipelineTriggers([pollSCM('30 * * * *')])])
                 }
-                git branch: 'main', url: 'https://github.com/AlmogChn/projectextension.git'
+                git branch: 'main', url: 'https://github.com/AlmogChn/projectextensionn.git'
             }
         }
         stage('run backend server') {
@@ -73,7 +73,15 @@ pipeline{
             steps{
                  sh 'python clean_environment.py'
             }
-        }      
+        }
+       stage('Deploy HELM chart'){
+            steps{
+                 sh 'helm install project RandomChart --set image.version=almogchn/almogchn/project_extension3:${IMAGE_TAG}'
+            }
+        }        
+        
+        
+        
     }   
     post {
         always {
