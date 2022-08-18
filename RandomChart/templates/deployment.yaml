@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: anotherproject
-        image: almogchn/project_extension3
+        image: {{ .Values.image.repository }}
         imagePullPolicy: Always
         ports:
         - containerPort: 5000
