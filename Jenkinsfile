@@ -87,7 +87,7 @@ pipeline{
             }
         }  
         
-       stage('Test deployed'){
+       stage('K8S backend testing'){
             steps{
                   sh 'python K8S_backend_testing.py'
             }
