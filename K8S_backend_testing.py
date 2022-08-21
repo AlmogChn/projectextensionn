@@ -18,7 +18,3 @@ try:
 
 except ValueError as v_error:
     print({"Try again": "id allows only integers", "info": v_error})
-
-
-
-
