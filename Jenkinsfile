@@ -81,12 +81,6 @@ pipeline{
             }
         } 
         
-       stage('Write your service URL'){
-            steps{
-                  sh 'minikube service anotherproject-service --url > k8s_url.txt'
-            }
-        }  
-        
        stage('Test deployed'){
             steps{
                   sh 'python K8S_backend_testing.py'
