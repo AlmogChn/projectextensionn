@@ -74,11 +74,30 @@ pipeline{
                  sh 'python clean_environment.py'
             }
         }
+        
        stage('Deploy HELM chart'){
             steps{
-                 sh 'helm install project RandomChart --set image.repository=almogchn/project_extension3:${BUILD_NUMBER}'
+                  sh 'helm install project RandomChart --set image.repository=almogchn/project_extension3:${BUILD_NUMBER}'
             }
-        }        
+        } 
+        
+       stage('Write your service URL'){
+            steps{
+                  sh 'minikube service anotherproject-service --url > k8s_url.txt'
+            }
+        }  
+        
+       stage('Test deployed'){
+            steps{
+                  sh 'python K8S_backend_testing.py'
+            }
+        }  
+        
+       stage('Clean HELM environment'){
+            steps{
+                  sh 'helm delete project'
+            }
+        }  
     }   
     post {
         always {
